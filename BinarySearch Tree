@@ -1,0 +1,69 @@
+class Node {
+    int data;
+    Node left, right;
+
+    Node(int value) {
+        data = value;
+        left = right = null;
+    }
+}
+
+public class BinarySearchTree {
+
+    Node root;
+
+    // Insert a node
+    Node insert(Node root, int value) {
+        if (root == null) {
+            return new Node(value);
+        }
+
+        if (value < root.data) {
+            root.left = insert(root.left, value);
+        } else if (value > root.data) {
+            root.right = insert(root.right, value);
+        }
+
+        return root;
+    }
+
+    // Inorder Traversal (sorted output)
+    void inorder(Node root) {
+        if (root != null) {
+            inorder(root.left);
+            System.out.print(root.data + " ");
+            inorder(root.right);
+        }
+    }
+
+    // Search element
+    boolean search(Node root, int key) {
+        if (root == null) {
+            return false;
+        }
+
+        if (key == root.data) {
+            return true;
+        } else if (key < root.data) {
+            return search(root.left, key);
+        } else {
+            return search(root.right, key);
+        }
+    }
+
+    public static void main(String[] args) {
+        BinarySearchTree bst = new BinarySearchTree();
+
+        int[] values = {8, 3, 10, 1, 6, 14};
+
+        for (int v : values) {
+            bst.root = bst.insert(bst.root, v);
+        }
+
+        System.out.print("Inorder Traversal: ");
+        bst.inorder(bst.root);
+
+        System.out.println("\nSearch 6: " + bst.search(bst.root, 6));
+        System.out.println("Search 5: " + bst.search(bst.root, 5));
+    }
+}
