@@ -1,0 +1,55 @@
+import java.util.*;
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int val) {
+        this.val = val;
+        this.next = null;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+
+        Scanner sc = new Scanner(System.in);
+        Stack<Integer> stack = new Stack<>();
+
+        System.out.print("Enter number of nodes: ");
+        int n = sc.nextInt();
+
+        if (n == 0) return;
+
+        // Create linked list
+        ListNode head = new ListNode(sc.nextInt());
+        ListNode temp = head;
+
+        for (int i = 1; i < n; i++) {
+            temp.next = new ListNode(sc.nextInt());
+            temp = temp.next;
+        }
+
+        // Push values into stack
+        temp = head;
+        while (temp != null) {
+            stack.push(temp.val);
+            temp = temp.next;
+        }
+
+        // Pop values back (reverse)
+        temp = head;
+        while (temp != null) {
+            temp.val = stack.pop();
+            temp = temp.next;
+        }
+
+        // Print reversed list
+        System.out.print("Reversed List: ");
+        temp = head;
+        while (temp != null) {
+            System.out.print(temp.val + " ");
+            temp = temp.next;
+        }
+    }
+}
