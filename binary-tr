@@ -1,0 +1,132 @@
+import java.util.*;
+
+class Main {
+
+    static int max = Integer.MIN_VALUE;   // Global variable
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Enter the values");
+        String a[] = sc.nextLine().trim().split("\\s+");
+
+        TreeNode root = buildTree(a);
+
+        System.out.println("Level Order Traversal:");
+        levelOrder(root);
+
+        System.out.print("Inorder Traversal: ");
+        inorder(root);
+        System.out.println();
+
+        System.out.print("Preorder Traversal: ");
+        preorder(root);
+        System.out.println();
+
+        System.out.print("Postorder Traversal: ");
+        postorder(root);
+        System.out.println();
+
+        // ✅ Maximum Path Sum
+        max = Integer.MIN_VALUE;   // reset before calculation
+        int result = maxPathSum(root);
+        System.out.println("Maximum Path Sum: " + result);
+    }
+
+    // ✅ Maximum Path Sum
+    public static int maxPathSum(TreeNode root) {
+        dfs(root);
+        return max;
+    }
+
+    public static int dfs(TreeNode root) {
+        if (root == null)
+            return 0;
+
+        int left = Math.max(0, dfs(root.left));
+        int right = Math.max(0, dfs(root.right));
+
+        max = Math.max(max, root.val + left + right);
+
+        return root.val + Math.max(left, right);
+    }
+
+    // ✅ Level Order
+    public static void levelOrder(TreeNode root) {
+        if (root == null) return;
+
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        while (!q.isEmpty()) {
+            int size = q.size();
+            while (size-- > 0) {
+                TreeNode node = q.poll();
+                System.out.print(node.val + " ");
+                if (node.left != null) q.add(node.left);
+                if (node.right != null) q.add(node.right);
+            }
+            System.out.println();
+        }
+    }
+
+    // ✅ Inorder
+    public static void inorder(TreeNode root) {
+        if (root == null) return;
+        inorder(root.left);
+        System.out.print(root.val + " ");
+        inorder(root.right);
+    }
+
+    // ✅ Preorder
+    public static void preorder(TreeNode root) {
+        if (root == null) return;
+        System.out.print(root.val + " ");
+        preorder(root.left);
+        preorder(root.right);
+    }
+
+    // ✅ Postorder
+    public static void postorder(TreeNode root) {
+        if (root == null) return;
+        postorder(root.left);
+        postorder(root.right);
+        System.out.print(root.val + " ");
+    }
+
+    // ✅ Build Tree from Level Order Input
+    public static TreeNode buildTree(String arr[]) {
+        if (arr.length == 0 || arr[0].equals("null")) return null;
+
+        TreeNode root = new TreeNode(Integer.parseInt(arr[0]));
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+
+        int i = 1;
+
+        while (!q.isEmpty() && i < arr.length) {
+            TreeNode curr = q.poll();
+
+            if (i < arr.length && !arr[i].equals("null")) {
+                curr.left = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(curr.left);
+            }
+            i++;
+
+            if (i < arr.length && !arr[i].equals("null")) {
+                curr.right = new TreeNode(Integer.parseInt(arr[i]));
+                q.add(curr.right);
+            }
+            i++;
+        }
+        return root;
+    }
+}
+
+class TreeNode {
+    TreeNode left, right;
+    int val;
+
+    TreeNode(int val) {
+        this.val = val;
+    }
+}
